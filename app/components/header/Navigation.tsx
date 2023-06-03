@@ -9,29 +9,20 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import Link from "next/link";
 
 const Navigation = () => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
-          </NavigationMenuContent>
+          <Link href="/docs" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Documentation
+            </NavigationMenuLink>
+          </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
