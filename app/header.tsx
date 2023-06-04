@@ -6,6 +6,7 @@ import { WagmiConfig } from "wagmi";
 
 import { chains, wagmiConfig } from "./components/Header/walletConnect";
 import { RainbowKitProvider, lightTheme } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -22,7 +23,9 @@ const Header = () => {
       >
         <div className="fixed top-3 flex flex-row w-full mx-auto max-w-[1200px]">
           <div className="flex flex-row mx-auto items-center justify-between w-full">
-            <p>HackFS 2023</p>
+            <Link href="/">
+              <p>HackFS 2023</p>
+            </Link>
             <Navigation />
             <ConnectButton />
           </div>
