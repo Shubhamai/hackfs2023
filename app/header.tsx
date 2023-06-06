@@ -22,15 +22,15 @@ const Header = () => {
           overlayBlur: "small",
         })}
       >
-        <div className="fixed top-3 flex flex-col w-full mx-auto max-w-[1200px] backdrop-blur-sm">
-          <div className="flex flex-row mx-auto items-center justify-between w-full">
+        <div className="fixed top-3 flex flex-col w-full max-w-[1200px] backdrop-blur-sm">
+          <div className="flex flex-row items-center justify-between w-full">
             <Link href="/">
               <p className="text-white underline decoration-1 decoration-wavy decoration-slate-400 underline-offset-4">
                 HackFS 2023
               </p>
             </Link>
             <Navigation />
-            <div className="rounded-full border-gray-700 border-[2px] z-50 border-solid gap-5">
+            <div className="rounded-md border-gray-700 border-[2px] border-solid gap-5">
               <ConnectButton />
             </div>
           </div>
