@@ -24,7 +24,9 @@ const Header = () => {
         <div className="fixed top-3 flex flex-row w-full mx-auto max-w-[1200px]">
           <div className="flex flex-row mx-auto items-center justify-between w-full">
             <Link href="/">
-              <p>HackFS 2023</p>
+              <p className="text-white underline decoration-1 decoration-wavy decoration-slate-400 underline-offset-4">
+                HackFS 2023
+              </p>
             </Link>
             <Navigation />
             <ConnectButton />
