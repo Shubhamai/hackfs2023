@@ -20,16 +20,18 @@ const Deploy = () => {
   // TODO : Improving github repo feature
   return (
     <div className="mt-[200px] flex flex-col gap-10 w-[800px]">
-      <h1 className="text-4xl font-bold">Let&lsquo;s build something new.</h1>
+      <h1 className="text-4xl font-bold text-white">
+        Let&lsquo;s build something new.
+      </h1>
 
-      <h3>
+      <h3 className="text-white">
         To Deploy your app, import an existing Git Repository, upload your model
         or get started with one of our templates.
       </h3>
-      <Input placeholder="Your app name..." />
-      <Input placeholder="Your app description..." />
+      <Input placeholder="Your app name..." className="text-white" />
+      <Input placeholder="Your app description..." className="text-white" />
       <div className="flex flex-row gap-5">
-        <Input id="model" type="file" />
+        <Input id="model" type="file" className="file:bg-white" />
         <Separator orientation="vertical" />
         <Command>
           <CommandInput placeholder="Pick your model from the templates..." />

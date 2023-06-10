@@ -2,18 +2,19 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Render from "./components/Render/render";
 
 export default function Home() {
-  if (document) {
-    document.addEventListener("keydown", function (event) {
-      if (event.key == "s") {
-        window.location.href = "/deploy";
-      }
+  // if (document) {
+    // document.addEventListener("keydown", function (event) {
+    //   if (event.key == "s") {
+    //     window.location.href = "/deploy";
+    //   }
       // if (event.key == "Control") {
       //   window.location.href = "/provide";
       // }
-    });
-  }
+  //   });
+  // }
 
   return (
     <div className="max-w-[2000px] mx-auto w-full h-full">
@@ -48,7 +49,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col gap-10 mt-[200px] ml-24"></div>
+        <div className="flex flex-col gap-10 mt-[200px] ml-24"><Render /></div>
       </div>
       {/* <div className="mt-[800px] flex flex-col items-center py-4">
         <p className="text-slate-500">
