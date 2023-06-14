@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,29 +17,52 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { db } from "@/utils/Polybase";
-import { Polybase } from "@polybase/client";
-import { ethPersonalSign } from "@polybase/eth";
+// import { db, getProviders } from "@/utils/Polybase";
+// import { Polybase } from "@polybase/client";
+// import { ethPersonalSign } from "@polybase/eth";
+import { useEffect, useState } from "react";
+import ComputeProviderCommand from "./provider";
+import { CommandBox } from "./command";
+import { getProviders } from "@/utils/Polybase";
 
-const getProviders = async () => {
-  const collection = db.collection("Providers");
-  const providers = await collection.get();
+const uploadData = () => {};
 
-  return providers;
-};
-
-const uploadData = async () => {};
-
-const Deploy = async () => {
+const Deploy = () => {
   // TODO : Currently necessary to add margin top everywhere, need fix
   // TODO : Improving github repo feature
 
-  const providers = await getProviders();
+  const [providers, setProviders] = useState({ data: [] });
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [model, setModel] = useState("");
+  const [choice, setChoice] = useState("");
+  const [rdr, setRDR] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProviders();
+      setProviders(data);
+    };
+
+    fetchData();
+  }, []);
+
+  const onFormSubmit = async () => {
+    const data = {
+      name,
+      description,
+      model: model || choice,
+      provider: rdr,
+    };
+
+    console.log("data", data);
+  };
 
   return (
     <div className="mt-[200px] flex flex-col gap-10 w-[800px]">
       <div className="flex flex-col gap-5">
-        <h1 className="text-4xl font-bold text-foreground">
+        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-100">
           Let&lsquo;s build something new.
         </h1>
 
@@ -45,15 +70,35 @@ const Deploy = async () => {
           To Deploy your app, use an existing template or upload your own model.
         </h3>
       </div>
+      {/* <form onSubmit={onFormSubmit} className="flex flex-col gap-10"> */}
       <div className="flex flex-col gap-3">
         <Label className="text-foreground">App Name</Label>
-        <Input placeholder="Your app name..." className="text-foreground" />
+        <Input
+          // onChange={(e) => {
+          //   setName(e.target.value);
+          // }}
+          name="name"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          placeholder="Your app name..."
+          className="text-foreground"
+        />
       </div>
       <div className="flex flex-col gap-3">
         <Label className="text-foreground">Description</Label>
         <Input
+          // onChange={(e) => {
+          //   setDescription(e.target.value);
+          // }}
+          name="description"
           placeholder="Your app description..."
           className="text-foreground"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
       </div>
       <div className="flex flex-col gap-3">
@@ -64,8 +109,15 @@ const Deploy = async () => {
             <Input
               className="text-background hidden"
               id="image-uploader"
+              // name="model"
+              value={model}
+              onChange={(e) => {
+                setModel(e.target.value);
+                // console.log(e.target.value);
+              }}
               type="file"
               accept="image/*"
+              required
               // onChange={handleChange}
             />
             <label
@@ -86,8 +138,16 @@ const Deploy = async () => {
               className="w-[1px] h-16 bg-foreground/10"
             />
           </div>
-          <Command className="rounded-lg border shadow-md">
+
+          {/* <CommandBox /> */}
+
+          <Command
+            className="rounded-lg border shadow-md"
+            value={choice}
+            onValueChange={setChoice}
+          >
             <CommandInput placeholder="Pick your model from the templates..." />
+
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup heading="Suggestions">
@@ -101,7 +161,12 @@ const Deploy = async () => {
       </div>
       <div className="flex flex-col gap-3">
         <Label className="text-foreground">Pick your Compute Provider</Label>
-        <Command className="rounded-lg border shadow-md">
+
+        <Command
+          className="rounded-lg border shadow-md"
+          value={rdr}
+          onValueChange={setRDR}
+        >
           <CommandInput placeholder="Pick your compute provider..." />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
@@ -123,7 +188,8 @@ const Deploy = async () => {
           </CommandList>
         </Command>
       </div>
-      <Button>Deploy</Button>
+
+      <Button onClick={onFormSubmit}>Deploy</Button>
     </div>
   );
 };

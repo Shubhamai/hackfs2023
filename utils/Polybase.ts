@@ -16,4 +16,12 @@ const db = new Polybase({
   },
 });
 
-export { db };
+const getProviders = async () => {
+  const collection = db.collection("Providers");
+  const providers = await collection.get();
+
+  return providers;
+};
+
+
+export { db, getProviders };
