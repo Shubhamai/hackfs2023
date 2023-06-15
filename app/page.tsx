@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Render from "./components/Render/render";
+import { CommandShortcut } from "@/components/ui/command";
 
 export default function Home() {
   // if (document) {
@@ -30,18 +31,18 @@ export default function Home() {
           </h4>
           <div className="flex flex-row gap-10">
             <Link href="/deploy">
-              <button className="text-slate-500 transition hover:text-slate-300">
+              <button className="text-foreground/50 transition hover:text-foreground">
                 Press{" "}
-                <span className="bg-slate-500 text-black px-[5px] py-[2px] rounded-md">
+                <span className="bg-foreground/50 text-background px-[5px] py-[2px] rounded-md">
                   S
                 </span>{" "}
                 to Deploy
               </button>
             </Link>
             <Link href="/provide">
-              <button className="text-slate-500 transition hover:text-slate-300">
+              <button className="text-foreground/50 transition hover:text-foreground">
                 Press{" "}
-                <span className="bg-slate-500 text-black px-[5px] py-[2px] rounded-md">
+                <span className="bg-foreground/50 text-background px-[5px] py-[2px] rounded-md">
                   Ctrl
                 </span>{" "}
                 to Provide Compute

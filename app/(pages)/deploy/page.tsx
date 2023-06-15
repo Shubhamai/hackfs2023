@@ -17,13 +17,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-// import { db, getProviders } from "@/utils/Polybase";
-// import { Polybase } from "@polybase/client";
-// import { ethPersonalSign } from "@polybase/eth";
 import { useEffect, useState } from "react";
-import ComputeProviderCommand from "./provider";
 import { CommandBox } from "./command";
-import { getProviders } from "@/utils/Polybase";
+import { db, getProviders } from "@/utils/Polybase";
+import { NFTStorage, File, Blob } from "nft.storage";
+import { Loader } from "lucide-react";
+import { nanoid } from "nanoid";
 
 const uploadData = () => {};
 
@@ -35,9 +34,15 @@ const Deploy = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [model, setModel] = useState("");
+  const [model, setModel] = useState<string | File>("");
   const [choice, setChoice] = useState("");
   const [rdr, setRDR] = useState("");
+  const [uploadInProgress, setUploadInProgress] = useState(false);
+  const [deployText, setDeployText] = useState("Deploy");
+
+  const client = new NFTStorage({
+    token: process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +54,9 @@ const Deploy = () => {
   }, []);
 
   const onFormSubmit = async () => {
+    setUploadInProgress(true);
+    setDeployText("Deploying");
+
     const data = {
       name,
       description,
@@ -56,7 +64,32 @@ const Deploy = () => {
       provider: rdr,
     };
 
-    console.log("data", data);
+    let inputOutputData;
+
+    const reader = new FileReader();
+    reader.addEventListener("load", (event) => {
+      // img.src = event.target.result;
+      inputOutputData = event.target.result.split("\n").shift().slice(1);
+      // const inputOutputData = JSON.parse(firstLine);
+    });
+    reader.readAsText(model);
+
+    const cid = await client.storeDirectory([model]);
+
+    const collection = db.collection("Deployments");
+
+    const recordData = await collection.create([
+      nanoid(),
+      name,
+      description,
+      cid,
+      inputOutputData,
+      true, //is_custom
+      rdr //provider
+    ]);
+
+    setUploadInProgress(false);
+    setDeployText("Deploy");
   };
 
   return (
@@ -70,13 +103,9 @@ const Deploy = () => {
           To Deploy your app, use an existing template or upload your own model.
         </h3>
       </div>
-      {/* <form onSubmit={onFormSubmit} className="flex flex-col gap-10"> */}
       <div className="flex flex-col gap-3">
         <Label className="text-foreground">App Name</Label>
         <Input
-          // onChange={(e) => {
-          //   setName(e.target.value);
-          // }}
           name="name"
           value={name}
           onChange={(e) => {
@@ -89,9 +118,6 @@ const Deploy = () => {
       <div className="flex flex-col gap-3">
         <Label className="text-foreground">Description</Label>
         <Input
-          // onChange={(e) => {
-          //   setDescription(e.target.value);
-          // }}
           name="description"
           placeholder="Your app description..."
           className="text-foreground"
@@ -108,20 +134,25 @@ const Deploy = () => {
           <>
             <Input
               className="text-background hidden"
-              id="image-uploader"
+              id="file-uploader"
               // name="model"
-              value={model}
-              onChange={(e) => {
-                setModel(e.target.value);
-                // console.log(e.target.value);
+              // value={model}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files) {
+                  const File = e.target.files[0];
+                  setModel(File);
+                  // console.log(e.target.value);
+                } else {
+                  console.log("no files");
+                }
               }}
               type="file"
-              accept="image/*"
+              accept="*"
               required
               // onChange={handleChange}
             />
             <label
-              htmlFor="image-uploader"
+              htmlFor="file-uploader"
               className="p-16 bg-background text-foreground text-center rounded-md border border-foreground/10 font-light text-sm cursor-pointer hover:bg-foreground/5 transition-all"
             >
               <i className="fa-solid fa-upload"></i>Upload / Drop Files
@@ -138,10 +169,7 @@ const Deploy = () => {
               className="w-[1px] h-16 bg-foreground/10"
             />
           </div>
-
-          {/* <CommandBox /> */}
-
-          <Command
+          {/* <Command
             className="rounded-lg border shadow-md"
             value={choice}
             onValueChange={setChoice}
@@ -156,7 +184,7 @@ const Deploy = () => {
                 <CommandItem>Stable Diffusion</CommandItem>
               </CommandGroup>
             </CommandList>
-          </Command>
+          </Command> */}
         </div>
       </div>
       <div className="flex flex-col gap-3">
@@ -189,7 +217,10 @@ const Deploy = () => {
         </Command>
       </div>
 
-      <Button onClick={onFormSubmit}>Deploy</Button>
+      <Button onClick={onFormSubmit}>
+        {deployText}{" "}
+        {uploadInProgress ? <Loader className="ml-4 animate-spin" /> : <></>}
+      </Button>
     </div>
   );
 };

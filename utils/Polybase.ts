@@ -8,10 +8,7 @@ const db = new Polybase({
   signer: (data) => {
     return {
       h: "eth-personal-sign",
-      sig: ethPersonalSign(
-        process.env.NEXT_PUBLIC_PRIVATE_KEY as string,
-        data
-      ), // TODO: THIS IS NOT SECURE
+      sig: ethPersonalSign(process.env.NEXT_PUBLIC_PRIVATE_KEY as string, data), // TODO: THIS IS NOT SECURE
     };
   },
 });
@@ -23,5 +20,11 @@ const getProviders = async () => {
   return providers;
 };
 
+const getDeployments = async () => {
+  const collection = db.collection("Deployments");
+  const deployments = await collection.get();
 
-export { db, getProviders };
+  return deployments;
+};
+
+export { db, getProviders, getDeployments  };

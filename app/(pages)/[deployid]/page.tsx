@@ -11,12 +11,35 @@ import { webRTCDirect } from "@libp2p/webrtc";
 import { pushable } from "it-pushable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getDeployments } from "@/utils/Polybase";
 
-const App = () => {
-  const [peer, setPeer] = useState("");
+const Deployment = ({ params }: { params: { deployid: string } }) => {
   const [message, setMessage] = useState("");
   const [sender, setSender] = useState<any>(null);
   const [node, setNode] = useState<any>(null);
+
+  const [peer, setPeer] = useState("");
+  const [inputOutputData, setInputOutputData] = useState<any>(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [modelURL, setModelURL] = useState("");
+
+  useEffect(() => {
+    getDeployments().then((deployments) => {
+      deployments.data.map((deployment, i) => {
+        if (deployment.data.id === params.deployid) {
+          console.log(deployment.data);
+          setPeer(deployment.data.provider);
+          setInputOutputData(JSON.parse(deployment.data.inputOutputData));
+          setName(deployment.data.name);
+          setDescription(deployment.data.description);
+          setModelURL(deployment.data.model);
+        }
+      });
+    });
+  }, [params.deployid]);
+  // const deployments = await getDeployments();
+  // console.log(deployments);
 
   useEffect(() => {
     (async () => {
@@ -75,11 +98,18 @@ const App = () => {
 
   return (
     <div className="mt-[200px] flex flex-col gap-10 w-[800px]">
-      <Input
+      {name}
+      {description}
+      {modelURL}
+      {JSON.stringify(inputOutputData)}
+      {peer}
+      {modelURL}
+
+      {/* <Input
         value={peer}
         onChange={(e) => setPeer(e.target.value)}
         placeholder="Peer"
-      />
+      /> */}
       <Button onClick={handleConnect}>Connect</Button>
 
       <Input
@@ -92,4 +122,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Deployment;

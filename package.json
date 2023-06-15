@@ -45,6 +45,7 @@
     "lucide-react": "^0.233.0",
     "nanoid": "^4.0.2",
     "next": "13.4.4",
+    "nft.storage": "^7.1.0",
     "postcss": "8.4.24",
     "r3f-perf": "^7.1.2",
     "react": "18.2.0",
