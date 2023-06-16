@@ -34,7 +34,7 @@ const Deploy = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [model, setModel] = useState<string | File>("");
+  const [model, setModel] = useState<any>(null);
   const [choice, setChoice] = useState("");
   const [rdr, setRDR] = useState("");
   const [uploadInProgress, setUploadInProgress] = useState(false);
@@ -68,13 +68,16 @@ const Deploy = () => {
 
     const reader = new FileReader();
     reader.addEventListener("load", (event) => {
-      // img.src = event.target.result;
       inputOutputData = event.target.result.split("\n").shift().slice(1);
       // const inputOutputData = JSON.parse(firstLine);
     });
-    reader.readAsText(model);
+    for (let fileIndex = 0; fileIndex < model.length; fileIndex++) {
+      if (model[fileIndex].name.endsWith(".py")) {
+        reader.readAsText(model[fileIndex]);
+      }
+    }
 
-    const cid = await client.storeDirectory([model]);
+    const cid = await client.storeDirectory(model);
 
     const collection = db.collection("Deployments");
 
@@ -85,7 +88,7 @@ const Deploy = () => {
       cid,
       inputOutputData,
       true, //is_custom
-      rdr //provider
+      rdr, //provider
     ]);
 
     setUploadInProgress(false);
@@ -139,8 +142,8 @@ const Deploy = () => {
               // value={model}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 if (e.target.files) {
-                  const File = e.target.files[0];
-                  setModel(File);
+                  // const File = e.target.files[0];
+                  setModel(e.target.files);
                   // console.log(e.target.value);
                 } else {
                   console.log("no files");
@@ -148,6 +151,7 @@ const Deploy = () => {
               }}
               type="file"
               accept="*"
+              multiple
               required
               // onChange={handleChange}
             />
