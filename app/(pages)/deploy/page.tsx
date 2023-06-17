@@ -96,8 +96,8 @@ const Deploy = () => {
   };
 
   return (
-    <div className="mt-[200px] flex flex-col gap-10 w-[800px]">
-      <div className="flex flex-col gap-5">
+    <div className="mt-[200px] flex flex-col gap-10 max-w-xl">
+      <div className="flex flex-col gap-5 w-full">
         <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-100">
           Let&lsquo;s build something new.
         </h1>
@@ -106,63 +106,67 @@ const Deploy = () => {
           To Deploy your app, use an existing template or upload your own model.
         </h3>
       </div>
-      <div className="flex flex-col gap-3">
-        <Label className="text-foreground">App Name</Label>
-        <Input
-          name="name"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          placeholder="Your app name..."
-          className="text-foreground"
-        />
-      </div>
-      <div className="flex flex-col gap-3">
-        <Label className="text-foreground">Description</Label>
-        <Input
-          name="description"
-          placeholder="Your app description..."
-          className="text-foreground"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-        />
-      </div>
-      <div className="flex flex-col gap-3">
-        <Label className="text-foreground">Upload your model</Label>
-        <div className="flex flex-row gap-5">
-          {/* <Input id="model" type="file" className="file:bg-white" /> */}
-          <>
-            <Input
-              className="text-background hidden"
-              id="file-uploader"
-              // name="model"
-              // value={model}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files) {
-                  // const File = e.target.files[0];
-                  setModel(e.target.files);
-                  // console.log(e.target.value);
-                } else {
-                  console.log("no files");
-                }
-              }}
-              type="file"
-              accept="*"
-              multiple
-              required
-              // onChange={handleChange}
-            />
-            <label
-              htmlFor="file-uploader"
-              className="p-16 bg-background text-foreground text-center rounded-md border border-foreground/10 font-light text-sm cursor-pointer hover:bg-foreground/5 transition-all"
-            >
-              <i className="fa-solid fa-upload"></i>Upload / Drop Files
-            </label>
-          </>
-          <div className="flex flex-col justify-between items-center">
+
+      <div className="flex flex-col gap-10 items-center justify-between">
+        <div className="flex flex-col gap-3 w-full">
+          <Label className="text-foreground">App Name</Label>
+          <Input
+            name="name"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            placeholder="Your app name..."
+            className="text-foreground"
+          />
+        </div>
+
+        <div className="flex flex-col gap-3 w-full">
+          <Label className="text-foreground">Description</Label>
+          <Input
+            name="description"
+            placeholder="Your app description..."
+            className="text-foreground"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col gap-3 w-full">
+          <Label className="text-foreground">Upload your model</Label>
+          <div className="flex flex-row gap-5">
+            {/* <Input id="model" type="file" className="file:bg-white" /> */}
+            <>
+              <Input
+                className="text-background hidden"
+                id="file-uploader"
+                // name="model"
+                // value={model}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files) {
+                    // const File = e.target.files[0];
+                    setModel(e.target.files);
+                    // console.log(e.target.value);
+                  } else {
+                    console.log("no files");
+                  }
+                }}
+                type="file"
+                accept="*"
+                multiple
+                required
+                // onChange={handleChange}
+              />
+              <label
+                htmlFor="file-uploader"
+                className="p-16 bg-background text-foreground text-center rounded-md border border-foreground/10 font-light text-sm cursor-pointer hover:bg-foreground/5 transition-all w-full"
+              >
+                <i className="fa-solid fa-upload"></i>Upload / Drop Files
+              </label>
+            </>
+            {/* <div className="flex flex-col justify-between items-center">
             <Separator
               orientation="vertical"
               className="w-[1px] h-16 bg-foreground/10"
@@ -172,8 +176,8 @@ const Deploy = () => {
               orientation="vertical"
               className="w-[1px] h-16 bg-foreground/10"
             />
-          </div>
-          {/* <Command
+          </div> */}
+            {/* <Command
             className="rounded-lg border shadow-md"
             value={choice}
             onValueChange={setChoice}
@@ -189,42 +193,45 @@ const Deploy = () => {
               </CommandGroup>
             </CommandList>
           </Command> */}
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Label className="text-foreground">Pick your Compute Provider</Label>
+        <div className="flex flex-col gap-3 w-full">
+          <Label className="text-foreground">Pick your Compute Provider</Label>
 
-        <Command
-          className="rounded-lg border shadow-md"
-          value={rdr}
-          onValueChange={setRDR}
-        >
-          <CommandInput placeholder="Pick your compute provider..." />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              {providers.data.map((provider, i) => {
-                return (
-                  <CommandItem key={i}>
-                    <div className="flex flex-row items-center justify-between">
-                      <div>{provider.data.name}</div>
-                      <div>
-                        <Badge variant="outline">{provider.data.libp2p}</Badge>
+          <Command
+            className="rounded-lg border shadow-md"
+            value={rdr}
+            onValueChange={setRDR}
+          >
+            <CommandInput placeholder="Pick your compute provider..." />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup heading="Suggestions">
+                {providers.data.map((provider, i) => {
+                  return (
+                    <CommandItem key={i}>
+                      <div className="flex flex-row items-center justify-between">
+                        <div>{provider.data.name}</div>
+                        <div>
+                          <Badge variant="outline">
+                            {provider.data.libp2p}
+                          </Badge>
+                        </div>
+                        <div></div>
                       </div>
-                      <div></div>
-                    </div>
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </div>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </div>
 
-      <Button onClick={onFormSubmit}>
-        {deployText}{" "}
-        {uploadInProgress ? <Loader className="ml-4 animate-spin" /> : <></>}
-      </Button>
+        <Button onClick={onFormSubmit} className="w-full items-center">
+          {deployText}{" "}
+          {uploadInProgress ? <Loader className="ml-4 animate-spin" /> : <></>}
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { getDeployments } from "@/utils/Polybase";
 import { Star } from "lucide-react";
@@ -14,7 +15,7 @@ const Explore = async () => {
             Deployments.
           </h1>
 
-          <h3 className="text-foreground">A page to explore all the models.</h3>
+          <h3 className="text-foreground">A page to explore all of the deployed models.</h3>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {deployments.data.map((deployment, i) => {
@@ -24,11 +25,11 @@ const Explore = async () => {
                 className="border-[1px] border-foreground/20 bg-background/50 p-3 rounded-lg flex flex-col gap-3 hover:border-foreground"
               >
                 <Link href={`/${deployment.data.id}`} className="flex flex-row gap-5 items-center">
-                  {/* <Avatar>
+                  <Avatar>
                     <AvatarImage
                       src={`https://source.boringavatars.com/beam?${i}`}
                     />
-                  </Avatar> */}
+                  </Avatar>
                   <div className="flex flex-col gap-[2px]">
                     <h3 className="font-bold">{deployment.data.name}</h3>
                     <h3 className="font-extralight text-sm">

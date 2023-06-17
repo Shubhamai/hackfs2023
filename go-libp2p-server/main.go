@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"bytes"
 	"bufio"
 	"fmt"
 	"log"
@@ -9,6 +11,8 @@ import (
 	"os/signal"
 	"syscall"
 	"os/exec"
+	"regexp"
+	"strings"
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/core/host"
@@ -55,13 +59,61 @@ func echoHandler(stream network.Stream) {
 		log.Printf("-----------------")
 		log.Printf("echo: %s", str)
 
-		cmd := exec.Command("explorer")
-	    cmderr := cmd.Run()
+		// if str is ping send pong
+		if str == "ping\n" {
+			log.Printf("ping received")
+			_, err = stream.Write([]byte("pong\n"))
+			if err != nil {
+				log.Printf("err: %v", err)
+				return
+			}
+			continue
+		}
+
+		// Decode the JSON to the interface.
+		// var jsonMap map[string]interface{}
+		// json.Unmarshal([]byte(str ), &jsonMap)
+		// fmt.Println(jsonMap) 
+		inputjson, _ := json.Marshal(str)
+		fmt.Println(string(inputjson))
+
+		
+		_, err = stream.Write([]byte("Bacalhau : Running Job "))// + match[1] + "\n"))
+		if err != nil {
+			log.Printf("err: %v", err)
+			return
+		}
+
+		// Running the command
+		cmd := exec.Command("bacalhau", "docker", "run", "ubuntu", "echo", "Hello World", "--download")
+	
+		var out bytes.Buffer
+		cmd.Stdout = &out
+		
+		cmderr := cmd.Run()
 		if cmderr != nil {
 			log.Printf("cmderr: %v", cmderr)
 		}
+		// fmt.Printf("translated phrase: %q\n", out.String())
+	
+		// Extracting Job ID : from out.String()
+		re := regexp.MustCompile(`Job ID: (\w+-\w+-\w+-\w+-\w+)`)
+		match := re.FindStringSubmatch(out.String())
+	
+		if len(match) > 0 {
+			fmt.Println("Job ID:", match[1])
+		} else {
+			fmt.Println("Job ID not found")
+		}
 
-		_, err = stream.Write([]byte("received: " + str + "\n"))
+		splitUUID := strings.Split(match[1], "-")
+		dat, err := os.ReadFile("job-"+splitUUID[0]+"/"+"stdout")
+		if err != nil {
+			panic(err)
+		}
+		log.Printf("File Output : %v", string(dat))
+		_, err = stream.Write([]byte("@"+string(dat)))
+		// _, err = stream.Write([]byte("{'output' : '" + string(dat) + "'}"))
 		if err != nil {
 			log.Printf("err: %v", err)
 			return

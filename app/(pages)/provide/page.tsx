@@ -28,12 +28,19 @@ const Provide = () => {
   };
 
   return (
-    <div className="mt-[200px] flex flex-col gap-10 w-[800px]">
-      <h1 className="font-extrabold text-3xl text-foreground">
-        Become a Provider
-      </h1>
-
-      <form onSubmit={onFormSubmit} className="flex flex-col gap-10">
+    <div className="mt-[300px] flex flex-col gap-20 items-center justify-center">
+      <div className="flex flex-col gap-5">
+        <h1 className="font-extrabold text-3xl text-foreground text-center">
+          Become a Provider
+        </h1>
+        <h3 className="font-light text-base text-foreground/60 text-center">
+          Provide your name and libp2p link to become a provider.
+        </h3>
+      </div>
+      <form
+        onSubmit={onFormSubmit}
+        className="flex flex-col gap-10 items-center justify-center"
+      >
         <div className="grid w-full max-w-sm items-center gap-5">
           <div className="flex flex-col gap-2">
             <Label htmlFor="name" className="text-foreground">

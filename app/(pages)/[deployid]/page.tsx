@@ -18,6 +18,8 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { create } from "ipfs-http-client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ReactMarkdown from "react-markdown";
+
 import {
   Table,
   TableBody,
@@ -50,12 +52,14 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
   const [description, setDescription] = useState("");
   const [modelURL, setModelURL] = useState("");
   const [fileList, setFileList] = useState<any>(null);
+  const [readMe, setReadMe] = useState<any>(null);
 
   const [input, setInput] = useState<any>(null);
-  const [output, setOutput] = useState<any>(null);
+  const [progressOutput, setProgressOutput] = useState<any>(null);
+  const [finalOutput, setFinalOutput] = useState<any>(null);
 
   const [isProviderOnline, setIsProviderOnline] = useState(false);
-  const [computeText, setComputeText] = useState("Compute");
+  const [computeInProgress, setComputeInProgress] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -103,7 +107,20 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
 
           getLinks(deployment.data.model).then((links) => {
             setFileList(links);
+
+            const readmeText = fetch(
+              "https://" +
+                deployment.data.model +
+                ".ipfs.nftstorage.link/" +
+                links.filter((file) => file.name.endsWith(".txt"))[0].name
+            )
+              .then((r) => r.text())
+              .then((t) => {
+                setReadMe(t);
+              });
           });
+
+          // setReadMe()
         }
       });
     });
@@ -125,6 +142,7 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
     const stream = await node.dialProtocol(ma, ["/echo/1.0.0"]);
 
     const sender = pushable();
+    sender.push(fromString("ping\n"));
     setSender(sender);
 
     pipe(sender, stream, async (src) => {
@@ -132,31 +150,37 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
         const response = toString(buf.subarray());
         const cleanResponse = clean(response);
         console.log(`Received message '${clean(response)}'`);
-        if (cleanResponse === "ping") {
+        if (cleanResponse === "pong") {
           setIsProviderOnline(true);
+        } else if (cleanResponse[0] == "@") {
+          setComputeInProgress(false);
+
+          setFinalOutput(cleanResponse.split("@")[1]);
         } else {
-          setComputeText("Compute");
-          setOutput(cleanResponse);
+          // if (progressOutput) {
+          //   setProgressOutput(progressOutput + "\n" + cleanResponse);
+          // } else {
+          setProgressOutput(cleanResponse);
+          // }
         }
       }
     });
   };
 
   const handleSend = async () => {
-    setComputeText("Computing...");
+    setComputeInProgress(true);
 
     const pythonFile = fileList.filter((file) => file.name.endsWith(".py"))[0];
-    // console.log(pythonFile);
-    const pythonFilePath = "https://" + modelURL + ".ipfs.nftstorage.link/" + pythonFile.name;
+    const pythonFilePath =
+      "https://" + modelURL + ".ipfs.nftstorage.link/" + pythonFile.name;
 
-      console.log(pythonFilePath);
     const sendMessage = `{"model" : "${pythonFilePath}", "input " : "${input}"}\n`;
     console.log(`Sending message '${clean(sendMessage)}'`);
     sender.push(fromString(sendMessage));
   };
 
   return (
-    <div className="mt-[130px] flex flex-col gap-10 w-[800px]">
+    <div className="mt-[130px] flex flex-col gap-10 w-[1200px]">
       <Tabs defaultValue="Model">
         <div className="flex flex-row justify-between items-start mb-5">
           <div className="flex flex-col gap-5">
@@ -187,33 +211,48 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
         <Separator orientation="horizontal" />
         <TabsContent
           value="Model"
-          className="flex flex-col gap-10 w-[800px] mt-12"
+          className="grid grid-cols-2 gap-10 w-[1200px] mt-12"
         >
-          <div className="grid w-full gap-1.5">
-            <Label htmlFor="input">Your Text input</Label>
-            {inputOutputData && inputOutputData.input === "text" ? (
-              <Textarea
-                value={input}
-                id="input"
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Input"
-              />
-            ) : (
-              <></>
-            )}
-          </div>
-          <Button onClick={handleSend}>{computeText}</Button>
-          <div>
-            <h4 className="flex flex-row gap-4 font-light text-base text-foreground/60">
-              Output
-            </h4>
+          {readMe ? <ReactMarkdown>{readMe}</ReactMarkdown> : <div></div>}
 
-            {output && inputOutputData.output === "image" ? (
-              <div>{output}</div>
-            ) : (
-              <>output</>
-            )}
-            {/* <Image src={output} alt="Output Image" /> */}
+          <div className="flex flex-col gap-7">
+            <div className="grid w-full gap-1.5">
+              <Label htmlFor="input">Your Text input</Label>
+              {inputOutputData && inputOutputData.input === "text" ? (
+                <Textarea
+                  value={input}
+                  id="input"
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Input"
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            <Button className="w-40" onClick={handleSend}>
+              {!computeInProgress ? "Compute" : "Computing..."}
+            </Button>
+            <div>
+              {progressOutput && inputOutputData.output === "image" ? (
+                <div className="flex flex-row gap-2 items-center mb-6">
+                  <div className="animate-ping w-1 h-1 rounded-full bg-green-500"></div>
+                  <div className="text-sm font-light text-foreground/50">
+                    {progressOutput}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+              {/* <Image src={output} alt="Output Image" /> */}
+
+              {!computeInProgress && finalOutput ? (
+                <h4 className="border boder-[1px] rounded-2xl p-4 gap-4 font-semibold text-foreground text-xl mb-6">
+                  {finalOutput}
+                </h4>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </TabsContent>
         {fileList ? (
