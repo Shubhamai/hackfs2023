@@ -1,5 +1,7 @@
 "use client";
 
+import NextLink from "next/link";
+
 import Navigation from "./components/header/Navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { WagmiConfig } from "wagmi";
@@ -8,9 +10,10 @@ import { chains, wagmiConfig } from "./components/header/walletConnect";
 import { RainbowKitProvider, lightTheme } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { PlaneTakeoff, User } from "lucide-react";
 
 const Header = () => {
-
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider
@@ -23,15 +26,17 @@ const Header = () => {
           overlayBlur: "small",
         })}
       >
-        <div className="fixed top-3 flex flex-col w-full max-w-[1200px] backdrop-blur-sm">
-          <div className="flex flex-row items-center justify-between w-full">
+        <div className="fixed top-3 left-0 flex flex-col w-full px-12 backdrop-blur-sm">
+          <div className="flex flex-row items-center gap-6 w-full">
             <Link href="/">
               <p className="text-white underline decoration-1 decoration-wavy decoration-slate-400 underline-offset-4">
                 HackFS 2023
               </p>
             </Link>
+
             <Navigation />
-            <div className="rounded-full border-gray-700 border-[1px] border-solid gap-5 px-4 py-2">
+
+            <div className="rounded-full gap-5 px-4 py-2 ml-auto">
               {/* <ConnectButton /> */}
               <ConnectButton.Custom>
                 {({
@@ -86,42 +91,21 @@ const Header = () => {
                         }
 
                         return (
-                          <div style={{ display: "flex", gap: 12 }}>
-                            <button
-                              onClick={openChainModal}
-                              style={{ display: "flex", alignItems: "center" }}
-                              type="button"
-                              className="text-white"  
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={openAccountModal}
                             >
-                              {chain.hasIcon && (
-                                <div
-                                  style={{
-                                    background: chain.iconBackground,
-                                    width: 12,
-                                    height: 12,
-                                    borderRadius: 999,
-                                    overflow: "hidden",
-                                    marginRight: 4,
-                                  }}
-                                >
-                                  {chain.iconUrl && (
-                                    <img
-                                      alt={chain.name ?? "Chain icon"}
-                                      src={chain.iconUrl}
-                                      style={{ width: 12, height: 12 }}
-                                    />
-                                  )}
-                                </div>
-                              )}
-                              {chain.name}
-                            </button>
-
-                            <button onClick={openAccountModal} className="text-white" type="button">
+                              <User className="w-4 h-4 mr-1" />
                               {account.displayName}
-                              {account.displayBalance
-                                ? ` (${account.displayBalance})`
-                                : ""}
-                            </button>
+                            </Button>
+
+                            <Button asChild>
+                              <NextLink href="/deploy">
+                                <PlaneTakeoff className="w-4 h-4 mr-1" />
+                                Deploy Model
+                              </NextLink>
+                            </Button>
                           </div>
                         );
                       })()}

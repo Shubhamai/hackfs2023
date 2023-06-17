@@ -2,18 +2,18 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Render from "./components/Render/render";
+import Render from "./components/Render/Render";
 import { CommandShortcut } from "@/components/ui/command";
 
 export default function Home() {
   // if (document) {
-    // document.addEventListener("keydown", function (event) {
-    //   if (event.key == "s") {
-    //     window.location.href = "/deploy";
-    //   }
-      // if (event.key == "Control") {
-      //   window.location.href = "/provide";
-      // }
+  // document.addEventListener("keydown", function (event) {
+  //   if (event.key == "s") {
+  //     window.location.href = "/deploy";
+  //   }
+  // if (event.key == "Control") {
+  //   window.location.href = "/provide";
+  // }
   //   });
   // }
 
@@ -50,7 +50,9 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col gap-10 mt-[200px] ml-24"><Render /></div>
+        <div className="flex flex-col gap-10 mt-[200px] ml-24">
+          <Render />
+        </div>
       </div>
       {/* <div className="mt-[800px] flex flex-col items-center py-4">
         <p className="text-slate-500">
