@@ -27,7 +27,7 @@ const Explore = async () => {
                 key={i}
                 className={cn(
                   "border-[1px] h-[200px] border-foreground/20 bg-background/50",
-                  "p-3 rounded-lg flex flex-col gap-3",
+                  "p-3 rounded-lg flex flex-col gap-3 overflow-hidden",
                   "transition-colors hover:border-foreground/30 hover:bg-foreground/5",
                   "hover:shadow-sm hover:shadow-foreground/40"
                 )}
@@ -42,11 +42,11 @@ const Explore = async () => {
                     />
                   </Avatar>
                   <div className="flex flex-col gap-[2px]">
-                    <h3 className="font-semibold text-foreground/90">
+                    <h3 className="font-semibold text-foreground/90 whitespace-pre">
                       {deployment.data.name}
                     </h3>
                   </div>
-                  <div className="flex flex-row gap-1 items-center ml-auto text-sm text-foreground/60 self-start">
+                  <div className="flex flex-row gap-1 items-center ml-auto text-sm text-foreground/60 whitespace-pre overflow-ellipsis">
                     {deployment.data.provider}
                   </div>
                 </Link>

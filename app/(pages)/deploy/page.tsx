@@ -222,12 +222,12 @@ const Deploy = () => {
                     return (
                       <CommandItem key={i}>
                         <div className="flex flex-row items-center justify-between">
-                          <div>{provider.data.name}</div>
-                          <div>
-                            <Badge variant="outline">
+                          <p className="whitespace-pre">{provider.data.name}</p>
+                          <p>
+                            <Badge variant="outline" className="whitespace-pre">
                               {provider.data.libp2p}
                             </Badge>
-                          </div>
+                          </p>
                           <div></div>
                         </div>
                       </CommandItem>
