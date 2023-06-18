@@ -50,7 +50,7 @@ export default function Render() {
             background
             blur={1}
         />
-      <Perf position="top-left" />
+      {/* <Perf position="top-left" /> */}
     </Canvas>
   );
 }

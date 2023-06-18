@@ -61,6 +61,18 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
   const [isProviderOnline, setIsProviderOnline] = useState(false);
   const [computeInProgress, setComputeInProgress] = useState(false);
 
+  const timeRef = React.useRef(null);
+  const startTimeRef = React.useRef(0);
+
+  useEffect(() => {
+    setInterval(() => {
+      if (timeRef.current && !finalOutput) {
+        const ms = Date.now() - startTimeRef?.current;
+        timeRef.current.textContent = `${(ms / 1000).toFixed(1)}s`;
+      }
+    }, 100);
+  }, []);
+
   useEffect(() => {
     (async () => {
       const node = await createLibp2p({
@@ -112,7 +124,7 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
               "https://" +
                 deployment.data.model +
                 ".ipfs.nftstorage.link/" +
-                links.filter((file) => file.name.endsWith(".txt"))[0].name
+                links.filter((file) => file.name.endsWith(".md"))[0].name
             )
               .then((r) => r.text())
               .then((t) => {
@@ -156,11 +168,14 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
           setComputeInProgress(false);
 
           setFinalOutput(cleanResponse.split("@")[1]);
+          startTimeRef.current = 0;
         } else {
           // if (progressOutput) {
           //   setProgressOutput(progressOutput + "\n" + cleanResponse);
           // } else {
           setProgressOutput(cleanResponse);
+          startTimeRef.current = Date.now();
+
           // }
         }
       }
@@ -170,13 +185,25 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
   const handleSend = async () => {
     setComputeInProgress(true);
 
+    console.log(inputOutputData);
+
     const pythonFile = fileList.filter((file) => file.name.endsWith(".py"))[0];
     const pythonFilePath =
       "https://" + modelURL + ".ipfs.nftstorage.link/" + pythonFile.name;
 
-    const sendMessage = `{"model" : "${pythonFilePath}", "input " : "${input}"}\n`;
+    // const sendMessage = `{"model" : "${pythonFilePath}", "input" : "${input}"}\n`;
+    const sendMessage =
+      JSON.stringify({
+        model: pythonFilePath,
+        input: inputOutputData.input,
+        bacalhau:
+          "bacalhau docker run --gpu 1 --timeout 3600 --wait-timeout-secs 3600 --wait --id-only --input https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt ultralytics/yolov5:v6.2 -- /bin/bash -c 'find /inputs -type f -exec cp {} /outputs/yolov5s.pt ; ; python detect.py --weights /outputs/yolov5s.pt --source $(pwd)/data/images --project /outputs'", //inputOutputData.bacalhau, //"bacalhau docker run ubuntu echo Hello World --download", /
+      }) + "\n";
     console.log(`Sending message '${clean(sendMessage)}'`);
     sender.push(fromString(sendMessage));
+
+    setFinalOutput(null);
+    timeRef.current = null;
   };
 
   return (
@@ -213,8 +240,9 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
           value="Model"
           className="grid grid-cols-2 gap-10 w-[1200px] mt-12"
         >
-          {readMe ? <ReactMarkdown>{readMe}</ReactMarkdown> : <div></div>}
-
+          <div className="flex flex-col gap-5 mb-32">
+            {readMe ? <ReactMarkdown>{readMe}</ReactMarkdown> : <div></div>}
+          </div>
           <div className="flex flex-col gap-7">
             <div className="grid w-full gap-1.5">
               <Label htmlFor="input">Your Text input</Label>
@@ -228,17 +256,53 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
               ) : (
                 <></>
               )}
+              {inputOutputData && inputOutputData.input === "image" ? (
+                <div>
+                  <Input
+                    className="text-background hidden"
+                    id="file-uploader"
+                    // name="model"
+                    // value={model}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (e.target.files) {
+                        // const File = e.target.files[0];
+                        setInput(e.target.files);
+                        // console.log(e.target.value);
+                      } else {
+                        console.log("no files");
+                      }
+                    }}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    required
+                    // onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="file-uploader"
+                    className="p-16 bg-background text-foreground text-center rounded-md border border-foreground/10 font-light text-sm cursor-pointer hover:bg-foreground/5 transition-all w-full"
+                  >
+                    <i className="fa-solid fa-upload"></i>Upload / Drop Images
+                  </label>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <Button className="w-40" onClick={handleSend}>
               {!computeInProgress ? "Compute" : "Computing..."}
             </Button>
             <div>
-              {progressOutput && inputOutputData.output === "image" ? (
+              {progressOutput ? (
                 <div className="flex flex-row gap-2 items-center mb-6">
                   <div className="animate-ping w-1 h-1 rounded-full bg-green-500"></div>
                   <div className="text-sm font-light text-foreground/50">
                     {progressOutput}
                   </div>
+                  <div
+                    ref={timeRef}
+                    className="text-sm font-light text-foreground/50"
+                  />
                 </div>
               ) : (
                 <></>
@@ -246,7 +310,7 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
               {/* <Image src={output} alt="Output Image" /> */}
 
               {!computeInProgress && finalOutput ? (
-                <h4 className="border boder-[1px] rounded-2xl p-4 gap-4 font-semibold text-foreground text-xl mb-6">
+                <h4 className="border boder-[1px] rounded-2xl p-4 gap-4 font-medium text-foreground text-base mb-6 break-words">
                   {finalOutput}
                 </h4>
               ) : (

@@ -34,6 +34,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+.gitignore
 
 .env
 utils/bacalhau.exe
+examples/whisper/example.mp3
+.gitignore

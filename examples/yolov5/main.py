@@ -1,7 +1,8 @@
 # {"input" : "audio", "output" : "text"}
-#
+
 
 import argparse
+import numpy as np
 import whisper
 
 

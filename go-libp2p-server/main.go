@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
+	// "encoding/json"
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p/core/host"
@@ -48,6 +49,13 @@ func init() {
 	}
 }
 
+// Define a type for your data
+type ModelData struct {
+	Model string `json:"model"`
+	Input string `json:"input"`
+	Bacalhau string `json:"bacalhau"`
+}
+
 func echoHandler(stream network.Stream) {
 	for {
 		reader := bufio.NewReader(stream)
@@ -74,8 +82,16 @@ func echoHandler(stream network.Stream) {
 		// var jsonMap map[string]interface{}
 		// json.Unmarshal([]byte(str ), &jsonMap)
 		// fmt.Println(jsonMap) 
-		inputjson, _ := json.Marshal(str)
-		fmt.Println(string(inputjson))
+		// inputjson, _ := json.Marshal(str)
+		// fmt.Println(string(inputjson))
+
+		var data ModelData
+
+		// Unmarshal the JSON string into our variable
+		modeldataerr := json.Unmarshal([]byte(str), &data)
+		if modeldataerr != nil {
+			log.Fatal(modeldataerr)
+		}
 
 		
 		_, err = stream.Write([]byte("Bacalhau : Running Job "))// + match[1] + "\n"))
@@ -85,8 +101,16 @@ func echoHandler(stream network.Stream) {
 		}
 
 		// Running the command
-		cmd := exec.Command("bacalhau", "docker", "run", "ubuntu", "echo", "Hello World", "--download")
-	
+		// data.Model, data.Input
+		// cmd := exec.Command("bacalhau", "docker", "run", "ubuntu", "echo", "Hello World", "--download")
+		splitcommand := strings.Split(data.Bacalhau, " ")
+		// Check to ensure the command is not an empty string
+		if len(splitcommand) < 1 {
+			fmt.Errorf("command is empty")
+		}
+		cmd := exec.Command(splitcommand[0], splitcommand[1:]...)
+
+
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		
