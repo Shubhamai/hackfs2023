@@ -11,9 +11,12 @@ import { Polybase } from "@polybase/client";
 import { ethPersonalSign } from "@polybase/eth";
 import { db } from "@/utils/Polybase";
 import { nanoid } from "nanoid";
+import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 const Provide = () => {
   const { address, connector, isConnected } = useAccount();
+  const router = useRouter()
 
   const onFormSubmit = async (e: any) => {
     e.preventDefault();
@@ -23,8 +26,11 @@ const Provide = () => {
     const recordData = await collection.create([
       nanoid(),
       e.target.name.value,
+      e.target.description.value,
       e.target.libp2p.value,
     ]);
+
+    router.push("/providers");
   };
 
   return (
@@ -46,14 +52,21 @@ const Provide = () => {
             <Label htmlFor="name" className="text-foreground">
               Name
             </Label>
-            <Input id="name" className="text-foreground" required></Input>
+            <Input id="name" className="text-foreground" placeholder="Home Server" required></Input>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="description" className="text-foreground">
+              Description
+            </Label>
+            <Textarea id="description" className="text-foreground" placeholder="Nvidia A100 40GB" required></Textarea>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="libp2p" className="text-foreground">
               Libp2p Link
             </Label>
-            <Input id="libp2p" className="text-foreground" required></Input>
+            <Input id="libp2p"  placeholder="/ip4/192.0.2.0/tcp/61790/ipfs/QmZKjsGJ6ukXVRXVEcExx9GhiyWoJC97onYpzBwCHPWqpL" className="text-foreground" required></Input>
           </div>
         </div>
 
