@@ -29,7 +29,7 @@ const Header = () => {
         <div className="fixed top-3 left-0 flex flex-col w-full px-12 backdrop-blur-sm">
           <div className="flex flex-row items-center gap-6 w-full">
             <Link href="/">
-              <p className="text-white underline decoration-1 decoration-wavy decoration-slate-400 underline-offset-4">
+              <p className="text-foreground underline decoration-1 decoration-wavy decoration-foreground/40 underline-offset-4">
                 HackFS 2023
               </p>
             </Link>
@@ -115,7 +115,7 @@ const Header = () => {
               </ConnectButton.Custom>
             </div>
           </div>
-          <Separator className="mt-5 bg-gradient-to-r from-slate-900 via-slate-500 to-slate-900  " />
+          <Separator className="mt-5 bg-border" />
         </div>
       </RainbowKitProvider>
     </WagmiConfig>

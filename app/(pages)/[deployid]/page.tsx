@@ -29,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ComponentIcon, CpuIcon, FileIcon } from "lucide-react";
 
 async function getLinks(ipfsPath) {
   const url = "https://dweb.link/api/v0";
@@ -109,9 +110,7 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
       deployments.data.map((deployment, i) => {
         if (deployment.data.id === params.deployid) {
           // setPeer(deployment.data.provider);
-          setPeer(
-            ""
-          );
+          setPeer("");
           setInputOutputData(JSON.parse(deployment.data.inputOutputData));
           setName(deployment.data.name);
           setDescription(deployment.data.description);
@@ -232,8 +231,12 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
           </div>
         </div>
         <TabsList className="grid my-5 grid-cols-2 w-[400px]">
-          <TabsTrigger value="Model">Model</TabsTrigger>
-          <TabsTrigger value="Files">Files</TabsTrigger>
+          <TabsTrigger className="gap-1" value="Model">
+            <ComponentIcon className="w-4 h-4" /> Model
+          </TabsTrigger>
+          <TabsTrigger className="gap-1" value="Files">
+            <FileIcon className="w-4 h-4" /> Files
+          </TabsTrigger>
         </TabsList>
         <Separator orientation="horizontal" />
         <TabsContent
@@ -289,7 +292,8 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
                 <></>
               )}
             </div>
-            <Button className="w-40" onClick={handleSend}>
+            <Button className="w-40 gap-2" onClick={handleSend}>
+              <CpuIcon className="w-4 h-4" />
               {!computeInProgress ? "Compute" : "Computing..."}
             </Button>
             <div>

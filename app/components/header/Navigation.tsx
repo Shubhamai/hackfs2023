@@ -18,8 +18,8 @@ const Navigation = () => {
   const pathname = usePathname();
 
   const linkClassName = (href: string) =>
-    `text-slate-300 transition hover:text-slate-100 ${
-      pathname === href ? "text-blue-500" : ""
+    `text-foreground/70 transition hover:text-foreground/90 ${
+      pathname === href ? "text-primary" : ""
     }`;
 
   return (

@@ -1,42 +1,78 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
- 
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 47.4% 11.2%;
- 
+
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
- 
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
- 
+
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
- 
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
- 
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+
     --destructive: 0 100% 50%;
     --destructive-foreground: 210 40% 98%;
- 
+
     --ring: 215 20.2% 65.1%;
- 
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
+    --hue: 8;
+
+    --background: var(--hue) 71% 96%;
+    --foreground: var(--hue) 31% 9%;
+
+    --muted: var(--hue) 47% 90%;
+    --muted-foreground: var(--hue) 16.3% 44%;
+
+    --popover: var(--hue) 71% 96%;
+    --popover-foreground: var(--hue) 20.2% 35%;
+
+    --card: var(--hue) 71% 96%;
+    --card-foreground: var(--hue) 31% 10%;
+
+    --border: var(--hue) 34% 83%;
+    --input: var(--hue) 34% 83%;
+
+    --primary: var(--hue) 100% 67%;
+    /* --primary: var(--hue) 75% 45%; */
+    --primary-foreground: var(--hue) 47.4% 98.8%;
+
+    --secondary: var(--hue) 47.4% 90%;
+    --secondary-foreground: var(--hue) 40% 2%;
+
+    --accent: var(--hue) 34% 83%;
+    --accent-foreground: var(--hue) 40% 2%;
+
+    --destructive: 0 63% 70%;
+    --destructive-foreground: 210 40% 2%;
+
+    --ring: var(--hue) 34% 82%;
+
+    --radius: 0.5rem;
+  }
+
+  /* .dark {
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
  
@@ -67,7 +103,7 @@
     --ring: 216 34% 17%;
  
     --radius: 0.5rem;
-  }
+  } */
 }
 
 *::-webkit-scrollbar {
@@ -89,7 +125,6 @@
   background-color: var(--tertiary);
 }
 
- 
 @layer base {
   * {
     @apply border-border;

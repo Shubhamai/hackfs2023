@@ -100,7 +100,7 @@ const Deploy = () => {
     <div className="mt-[150px] flex gap-10">
       <div className="bg-foreground/5 p-6 rounded-md border border-border shadow shadow-foreground/60 w-xl">
         <div className="flex flex-col gap-2 w-full mb-10">
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-100">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">
             Let&lsquo;s build something new.
           </h1>
           <h3 className="text-sm text-foreground/60">

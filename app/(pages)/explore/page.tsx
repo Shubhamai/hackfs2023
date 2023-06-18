@@ -12,7 +12,7 @@ const Explore = async () => {
     <div>
       <div className="mt-[200px] flex flex-col gap-20 w-[1200px]">
         <div className="flex flex-col gap-5">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-300 to-slate-100">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">
             Deployments.
           </h1>
 
