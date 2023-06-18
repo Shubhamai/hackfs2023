@@ -80,21 +80,21 @@ const Deploy = () => {
       }
     }
 
-    const cid = await client.storeDirectory(model);
+    // const cid = await client.storeDirectory(model);
 
-    const collection = db.collection("Deployments");
+    // const collection = db.collection("Deployments");
 
-    const recordId = nanoid();
+    // const recordId = nanoid();
 
-    const recordData = await collection.create([
-      recordId,
-      name,
-      description,
-      cid,
-      inputOutputData,
-      true, //is_custom
-      rdr, //provider
-    ]);
+    // const recordData = await collection.create([
+    //   recordId,
+    //   name,
+    //   description,
+    //   cid,
+    //   inputOutputData,
+    //   true, //is_custom
+    //   rdr, //provider
+    // ]);
 
     setUploadInProgress(false);
     setDeployText("Deploy");
@@ -104,7 +104,7 @@ const Deploy = () => {
 
   return (
     <div className="mt-[150px] flex gap-10">
-      <div className="bg-foreground/5 p-6 rounded-md border border-border shadow shadow-foreground/60 w-xl">
+      <div className="bg-foreground/5 p-6 rounded-md border border-border shadow shadow-foreground/60 w-xl w-[800px]">
         <div className="flex flex-col gap-2 w-full mb-10">
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">
             Let&lsquo;s build something new.
@@ -251,18 +251,18 @@ const Deploy = () => {
 
       <div>
         <p className={cn(hintClassName, "mt-96")}>
-          <ArrowLeft className="w-4 h-4" /> this your model file, it should end
-          with `.model`
+          <ArrowLeft className="w-4 h-4" /> Upload your files such as README.md,
+          and main.py for the script to run
         </p>
 
         <p className={cn(hintClassName, "mt-56")}>
           <ArrowLeft className="w-4 h-4" /> the compute provides will provide
-          compute for your model, using LIP2kb
+          compute for your model, using libp2p and bacalhu
         </p>
 
         <p className={cn(hintClassName, "mt-44")}>
-          <ArrowLeft className="w-4 h-4" /> the model will be deployed on IPFS,
-          and the providers will provide compute
+          <ArrowLeft className="w-4 h-4" /> the model files and data will be
+          deployed on filecoin IPFS, and polybase for metadata
         </p>
       </div>
     </div>

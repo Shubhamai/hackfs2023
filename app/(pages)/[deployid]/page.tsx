@@ -30,6 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ComponentIcon, CpuIcon, FileIcon } from "lucide-react";
+import { BuyCompute, useComputeTokens } from "../providers/BuyCompute";
 
 async function getLinks(ipfsPath) {
   const url = "https://dweb.link/api/v0";
@@ -43,6 +44,9 @@ async function getLinks(ipfsPath) {
 }
 
 const Deployment = ({ params }: { params: { deployid: string } }) => {
+  let providerAddress = "0x374d50AD1d3C82EB58fDCA0D81D05C20730B810f";
+  const [tokens, setTokens] = useComputeTokens();
+
   const [message, setMessage] = useState("");
   const [sender, setSender] = useState<any>(null);
   const [node, setNode] = useState<any>(null);
@@ -110,7 +114,9 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
       deployments.data.map((deployment, i) => {
         if (deployment.data.id === params.deployid) {
           // setPeer(deployment.data.provider);
-          setPeer("");
+          setPeer(
+            ""
+          );
           setInputOutputData(JSON.parse(deployment.data.inputOutputData));
           setName(deployment.data.name);
           setDescription(deployment.data.description);
@@ -167,7 +173,8 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
           setComputeInProgress(false);
 
           setFinalOutput(cleanResponse.split("@")[1]);
-          startTimeRef.current = 0;
+          // startTimeRef.current = Date.now();
+          timeRef.current = null;
         } else {
           // if (progressOutput) {
           //   setProgressOutput(progressOutput + "\n" + cleanResponse);
@@ -199,6 +206,8 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
       }) + "\n";
     console.log(`Sending message '${clean(sendMessage)}'`);
     sender.push(fromString(sendMessage));
+
+    setTokens(tokens - 1);
 
     setFinalOutput(null);
     timeRef.current = null;
@@ -291,10 +300,16 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
                 <></>
               )}
             </div>
-            <Button className="w-40 gap-2" onClick={handleSend}>
-              <CpuIcon className="w-4 h-4" />
-              {!computeInProgress ? "Compute" : "Computing..."}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button className="w-40 gap-2" onClick={handleSend}>
+                <CpuIcon className="w-4 h-4" />
+                {!computeInProgress ? "Compute" : "Computing..."}
+              </Button>
+
+              <p className="text-foreground/70 text-sm">{tokens} tokens left</p>
+            </div>
+
+            <BuyCompute providerAddress={providerAddress} />
             <div>
               {progressOutput ? (
                 <div className="flex flex-row gap-2 items-center mb-6">

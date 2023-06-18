@@ -35,7 +35,7 @@ export default function Home() {
             One Click
           </h1>
           <h4 className="text-foreground/70">
-            Run your models on a decentralized network with API service
+            Deploy your models on a decentralized network with your favorite compute provider.
           </h4>
           <div className="flex flex-row gap-5">
             <Button asChild className="gap-2">
@@ -71,7 +71,7 @@ export default function Home() {
                 "flex flex-col items-center gap-3"
               )}
             >
-              <li>yes, its true</li>
+              {/* <li>yes, its true</li> */}
               <li>
                 <Link
                   href="/provide"
@@ -79,7 +79,7 @@ export default function Home() {
                 >
                   demo
                 </Link>{" "}
-                of how can do deploy within 2 minuites
+                of how you can deploy within 2 minutes
               </li>
             </ul>
           </div>
@@ -91,8 +91,7 @@ export default function Home() {
                 Deploy Model
               </h3>
               <p className="text-foreground/70">
-                Deploy your model in one click, and get a link to your API
-                endpoint. Pay as you go, and only for what you use. (soon)
+                Upload, Deploy and choose your compute provider in one click. Pay as you go, and pay only for what you use.
               </p>
             </div>
 
@@ -118,7 +117,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-12 w-96">
+          {/* <div className="flex flex-col gap-12 w-96">
             <div className="flex flex-col gap-6 justify-center w-full mt-20">
               <h3 className="text-2xl font-semibold text-foreground">
                 How it works?
@@ -150,7 +149,7 @@ export default function Home() {
                 <li>filecoin makes this tech possible</li>
               </ul>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-12 justify-center w-full mt-20">
             <h3 className="text-center text-2xl font-semibold text-foreground">
@@ -203,8 +202,8 @@ export default function Home() {
             )}
           >
             <div className="w-fit flex flex-col px-10">
-              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold">
-                12
+              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold text-center ">
+                5
               </h5>
               <p className="uppercase text-foreground/50 font-medium">
                 Models Deployed
@@ -212,20 +211,20 @@ export default function Home() {
             </div>
 
             <div className="w-fit flex flex-col px-10">
-              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold">
-                12
+              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold text-center">
+                3
               </h5>
               <p className="uppercase text-foreground/50 font-medium">
-                Models Deployed
+                Compute Providers
               </p>
             </div>
 
             <div className="w-[fit flex flex-col px-10">
-              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold">
-                12
+              <h5 className="uppercase text-foreground/80 text-6xl font-extrabold text-center">
+                34
               </h5>
               <p className="uppercase text-foreground/50 font-medium">
-                Models Deployed
+                Total Executions
               </p>
             </div>
           </div>

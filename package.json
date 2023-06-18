@@ -1,5 +1,5 @@
 {
-  "name": "hackfs2023",
+  "name": "inferai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -48,6 +48,7 @@
     "nanoid": "^4.0.2",
     "next": "13.4.4",
     "nft.storage": "^7.1.0",
+    "pino-pretty": "^10.0.0",
     "postcss": "8.4.24",
     "r3f-perf": "^7.1.2",
     "react": "18.2.0",

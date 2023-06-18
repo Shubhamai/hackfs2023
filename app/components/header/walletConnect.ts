@@ -6,12 +6,28 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  filecoinCalibration,
+  filecoinHyperspace,
+  optimismGoerli,
+} from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum], // TODO : Maybe adding custom chains here for the hackathon ?
+  [
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    filecoinCalibration,
+    filecoinHyperspace,
+    optimismGoerli,
+  ], // TODO : Maybe adding custom chains here for the hackathon ?
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider(),

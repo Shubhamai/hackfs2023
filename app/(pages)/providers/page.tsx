@@ -1,12 +1,65 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getProviders } from "@/utils/Polybase";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { useAccount, usePrepareContractWrite, useWalletClient } from "wagmi";
+import usercontractabi from "../../../fevm-data-dao-kit/deployments/Calibration/SimpleCoin.json";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { BuyCompute } from "./BuyCompute";
 
-const Providers = async () => {
-  const providers = await getProviders();
+const Providers = () => {
+  const [providers, setProviders] = useState([]);
+
+  const { config } = usePrepareContractWrite({
+    address: usercontractabi.address,
+    abi: usercontractabi.abi,
+    functionName: "SimpleCoin",
+  });
+
+  useEffect(() => {
+    getProviders().then((prs) => {
+      setProviders(prs.data);
+    });
+  }, []);
+
+  const { address, connector, isConnected } = useAccount();
+  const signer = useWalletClient();
+
+  const payProvider = () => {
+    console.log("Pay Provider");
+
+    // const { data: ensAvatar } = useEnsAvatar({ address })
+    // const { data: ensName } = useEnsName({ address })
+    // const { connect, connectors, error, isLoading, pendingConnector } =
+    //   useConnect()
+    // const { disconnect } = useDisconnect()
+
+    console.log("Provider Address: ", address);
+
+    // const accounts = await window.ethereum.request({
+    //   method: "eth_requestAccounts",
+    // });
+
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = provider.getSigner();
+
+    // const CONTRACT_ADDRESS = usercontractabi.address;
+    // console.log("Contract Address: ", CONTRACT_ADDRESS);
+    // const usercontract = new ethers.Contract(
+    //   CONTRACT_ADDRESS,
+    //   usercontractabi.abi,
+    //   // provider
+    //   signer.data.sign
+    // );
+
+    // let data = await usercontract.getAllUsers();
+    // console.log("User Contract: ", data);
+  };
 
   return (
     <div className="mt-[200px] flex flex-col gap-20 w-[1200px]">
@@ -20,7 +73,7 @@ const Providers = async () => {
         </h3>
       </div>
       <div className="flex flex-col divide-y divide-border">
-        {providers.data.map((provider, i) => {
+        {providers.map((provider, i) => {
           return (
             <div
               key={i}
@@ -29,9 +82,10 @@ const Providers = async () => {
                 "cursor-pointer hover:bg-foreground/10"
               )}
             >
-              <Link
-                href={`/${provider.data.id}`}
+              <div
+                // href={`/${provider.data.id}`}
                 className="flex flex-row gap-5 items-center"
+                onClick={payProvider}
               >
                 <Avatar className="w-8 h-8">
                   <AvatarImage
@@ -39,14 +93,12 @@ const Providers = async () => {
                   />
                 </Avatar>
                 <div className="flex flex-col gap-[2px]">
-                  <h3 className="font-bold">
-                    {provider.data.name}
-                  </h3>
+                  <h3 className="font-bold">{provider.data.name}</h3>
                 </div>
                 <div className="font-extralight text-sm">
                   {provider.data.libp2p}
                 </div>
-              </Link>
+              </div>
 
               <h3 className="font-extralight text-sm">
                 {provider.data.description}
@@ -60,7 +112,7 @@ const Providers = async () => {
                 >
                   <Star className="w-4 h-4" /> Favorite
                 </Button>
-                <Button
+                {/* <Button
                   className="gap-2 p-2 h-8 hover:bg-foreground/5 border-foreground/30"
                   variant="outline"
                   size="sm"
@@ -70,7 +122,7 @@ const Providers = async () => {
                     size={20}
                   />{" "}
                   4.5 / 5
-                </Button>
+                </Button> */}
               </div>
             </div>
           );
