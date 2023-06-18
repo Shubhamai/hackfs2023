@@ -1,5 +1,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { getDeployments } from "@/utils/Polybase";
 import { Star } from "lucide-react";
 import Link from "next/link";
@@ -15,38 +16,54 @@ const Explore = async () => {
             Deployments.
           </h1>
 
-          <h3 className="text-foreground">A page to explore all of the deployed models.</h3>
+          <h3 className="text-foreground">
+            A page to explore all of the deployed models.
+          </h3>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {deployments.data.map((deployment, i) => {
             return (
               <div
                 key={i}
-                className="border-[1px] border-foreground/20 bg-background/50 p-3 rounded-lg flex flex-col gap-3 hover:border-foreground"
+                className={cn(
+                  "border-[1px] h-[200px] border-foreground/20 bg-background/50",
+                  "p-3 rounded-lg flex flex-col gap-3",
+                  "transition-colors hover:border-foreground/30 hover:bg-foreground/5",
+                  "hover:shadow-sm hover:shadow-foreground/40"
+                )}
               >
-                <Link href={`/${deployment.data.id}`} className="flex flex-row gap-5 items-center">
-                  <Avatar>
+                <Link
+                  href={`/${deployment.data.id}`}
+                  className="flex flex-row gap-3 items-center"
+                >
+                  <Avatar className="w-8 h-8">
                     <AvatarImage
                       src={`https://source.boringavatars.com/beam?${i}`}
                     />
                   </Avatar>
                   <div className="flex flex-col gap-[2px]">
-                    <h3 className="font-bold">{deployment.data.name}</h3>
-                    <h3 className="font-extralight text-sm">
-                      {deployment.data.description}
+                    <h3 className="font-semibold text-foreground/90">
+                      {deployment.data.name}
                     </h3>
                   </div>
-                  <div className="flex flex-row gap-1 items-center ml-auto">
+                  <div className="flex flex-row gap-1 items-center ml-auto text-sm text-foreground/60 self-start">
                     {deployment.data.provider}
                   </div>
                 </Link>
-                <Button
-                  className="p-2 w-40 h-8 hover:bg-foreground/5"
-                  variant={"outline"}
-                  size={"sm"}
-                >
-                  Add to Favorites
-                </Button>
+
+                <h3 className="font-extralight text-sm">
+                  {deployment.data.description}
+                </h3>
+
+                <div className="mt-auto">
+                  <Button
+                    className="gap-2 p-2 h-8 hover:bg-foreground/5 border-foreground/30"
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Star className="w-4 h-4" /> Favorite
+                  </Button>
+                </div>
               </div>
             );
           })}

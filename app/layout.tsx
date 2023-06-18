@@ -1,8 +1,14 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+
+import { Inter, Delius } from "next/font/google";
 import Header from "./header";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
+const fdrika = Delius({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "HackFS 2023",
@@ -17,7 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} max-w-[1200px] mx-auto w-screen h-screen dark`}
+        className={cn(
+          `${inter.className} max-w-[1200px] mx-auto w-screen h-screen dark`
+          // `[--handwritten:${fdrika.style.fontFamily}]`
+        )}
+        style={{
+          ["--handwritten"]: fdrika.style.fontFamily,
+        }}
       >
         <Header />
         {children}
