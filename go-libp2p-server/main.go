@@ -103,7 +103,7 @@ func echoHandler(stream network.Stream) {
 		// Running the command
 		// data.Model, data.Input
 		// cmd := exec.Command("bacalhau", "docker", "run", "ubuntu", "echo", "Hello World", "--download")
-		splitcommand := strings.Split(data.Bacalhau, " ")
+		splitcommand := strings.Split(data.Bacalhau, " ") // The bacalhau is being ran as a command, the command is provided in the application by the user
 		// Check to ensure the command is not an empty string
 		if len(splitcommand) < 1 {
 			fmt.Errorf("command is empty")
@@ -130,6 +130,7 @@ func echoHandler(stream network.Stream) {
 			fmt.Println("Job ID not found")
 		}
 
+		// extract the bacalhau output
 		splitUUID := strings.Split(match[1], "-")
 		dat, err := os.ReadFile("job-"+splitUUID[0]+"/"+"stdout")
 		if err != nil {
