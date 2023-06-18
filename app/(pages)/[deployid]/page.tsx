@@ -195,8 +195,7 @@ const Deployment = ({ params }: { params: { deployid: string } }) => {
       JSON.stringify({
         model: pythonFilePath,
         input: inputOutputData.input,
-        bacalhau:
-          "bacalhau docker run --gpu 1 --timeout 3600 --wait-timeout-secs 3600 --wait --id-only --input https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt ultralytics/yolov5:v6.2 -- /bin/bash -c 'find /inputs -type f -exec cp {} /outputs/yolov5s.pt ; ; python detect.py --weights /outputs/yolov5s.pt --source $(pwd)/data/images --project /outputs'", //inputOutputData.bacalhau, //"bacalhau docker run ubuntu echo Hello World --download", /
+        bacalhau: inputOutputData.bacalhau, //"bacalhau docker run ubuntu echo Hello World --download", /
       }) + "\n";
     console.log(`Sending message '${clean(sendMessage)}'`);
     sender.push(fromString(sendMessage));

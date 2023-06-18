@@ -24,12 +24,14 @@ import { NFTStorage, File, Blob } from "nft.storage";
 import { ArrowLeft, Dot, Loader } from "lucide-react";
 import { nanoid } from "nanoid";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const uploadData = () => {};
 
 const Deploy = () => {
   // TODO : Currently necessary to add margin top everywhere, need fix
   // TODO : Improving github repo feature
+  const router = useRouter();
 
   const [providers, setProviders] = useState({ data: [] });
 
@@ -82,8 +84,10 @@ const Deploy = () => {
 
     const collection = db.collection("Deployments");
 
+    const recordId = nanoid();
+
     const recordData = await collection.create([
-      nanoid(),
+      recordId,
       name,
       description,
       cid,
@@ -94,6 +98,8 @@ const Deploy = () => {
 
     setUploadInProgress(false);
     setDeployText("Deploy");
+
+    router.push(`/explore`);
   };
 
   return (

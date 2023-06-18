@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getProviders } from "@/utils/Polybase";
 import { Star } from "lucide-react";
+import Link from "next/link";
 
 const Providers = async () => {
   const providers = await getProviders();
@@ -28,43 +29,49 @@ const Providers = async () => {
                 "cursor-pointer hover:bg-foreground/10"
               )}
             >
-              <div className="flex flex-row gap-5 items-center">
-                <Avatar>
+              <Link
+                href={`/${provider.data.id}`}
+                className="flex flex-row gap-5 items-center"
+              >
+                <Avatar className="w-8 h-8">
                   <AvatarImage
                     src={`https://source.boringavatars.com/beam?${i}`}
                   />
                 </Avatar>
                 <div className="flex flex-col gap-[2px]">
-                  <h3 className="font-bold">{provider.data.name}</h3>
-                  <h3 className="font-extralight text-sm">
-                    {provider.data.libp2p}
+                  <h3 className="font-bold">
+                    {provider.data.name}
                   </h3>
                 </div>
-                <div className="flex flex-row gap-3 items-center ml-auto">
+                <div className="font-extralight text-sm">
+                  {provider.data.libp2p}
+                </div>
+              </Link>
+
+              <h3 className="font-extralight text-sm">
+                {provider.data.description}
+              </h3>
+
+              <div className="flex flex-row gap-3 items-center ml-auto">
+                <Button
+                  className="gap-2 p-2 h-8 hover:bg-foreground/5 border-foreground/30"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Star className="w-4 h-4" /> Favorite
+                </Button>
+                <Button
+                  className="gap-2 p-2 h-8 hover:bg-foreground/5 border-foreground/30"
+                  variant="outline"
+                  size="sm"
+                >
                   <Star
                     className="stroke-yellow-300 fill-yellow-300"
                     size={20}
                   />{" "}
                   4.5 / 5
-                  <Button
-                    className="p-2 w-40 h-8 hover:bg-foreground/5"
-                    variant={"outline"}
-                    size={"sm"}
-                  >
-                    Add to Favorites
-                  </Button>
-                </div>
-              </div>
-
-              {/* <div className="self-end">
-                <Button
-                  className="p-2 w-40 h-8 hover:bg-foreground/5"
-                  variant={"outline"}
-                  size={"sm"}
-                >
-                  Add to Favorites
                 </Button>
-              </div> */}
+              </div>
             </div>
           );
         })}
